@@ -220,15 +220,16 @@ def select(options):
     },
     ]
     a = prompt(select_options, style=custom_style_2)
-    book_ID = int(options[a['book']])
+    book_ID = options[a['book']]
     # Print book info
     try:
         conn = connectBase()
         cur = conn.cursor()
-        cur.execute("SELECT title, author.name, publisher.name, ISBN, price, genre, page_num, inventory_quantity  FROM book, author, publisher WHERE book.ID = %s and author.ID = book.authorID and book.publisherID = publisher.ID", (book_ID))
+        cur.execute("SELECT title, author.name, publisher.name, ISBN, price, genre, page_num, inventory_quantity  FROM book, author, publisher WHERE book.ID = %s and author.ID = book.authorID and book.publisherID = publisher.ID", (book_ID,))
         rows = cur.fetchall()
         print("Book information ")
         book = rows[0]
+        print('\n\n\n')
         print('Title: ', book[0])
         print('Author: ', book[1])
         print('Publisher: ', book[2])
@@ -237,6 +238,8 @@ def select(options):
         print('Genre: ', book[5])
         print('Pages: ', str(book[6]))
         print('Quantity: ', str(book[7]))
+        print('\n\n\n')
+
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -246,7 +249,7 @@ def select(options):
         a = prompt(next_options, style=custom_style_2)
         c = a['action']
         if c == 'Menu':
-            menu()
+            menu(isOwner)
         elif c == 'Exit':
             running = False
 
@@ -278,7 +281,7 @@ def browse():
         print()
         print()
         for i, row in enumerate(rows):
-            print('{}. {} by {} '.format(i, row[1], row[2]))
+            print('{}. {} by {} ID = {}'.format(i, row[1], row[2], str(row[0])))
             # set options hash table
             options[row[1]] = str(row[0])
         print()
@@ -294,7 +297,7 @@ def browse():
         if c == 'Select Book(s)':
             select(options)
         elif c == 'Menu':
-            menu()
+            menu(isOwner)
         elif c == 'Exit':
             running = False
 
