@@ -24,7 +24,7 @@ marshmallow==2.19.5
 numpy==1.17.0
 Pillow==6.2.1
 prompt-toolkit==1.0.14
-protobuf==3.9.0
+protobuf==3.18.3
 psycopg2==2.8.3
 psycopg2-binary==2.8.3
 Pygments==2.6.1
